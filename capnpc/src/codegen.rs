@@ -2616,7 +2616,7 @@ fn generate_node(
                     )));
                     server_interior.push(
                         Line(fmt!(ctx,
-                                  "fn {}(&mut self, _: {}Params<{}>, _: {}Results<{}>) -> {capnp}::capability::Promise<(), {capnp}::Error> {{ {capnp}::capability::Promise::err({capnp}::Error::unimplemented(\"method {}::Server::{} not implemented\".to_string())) }}",
+                                  "fn {}(&mut self, _: {}Params<{}>, _: {}Results<{}>) -> {capnp}::capability::Promise<(), {capnp}::Error> {{ {capnp}::capability::Promise::err({capnp}::Error::unimplemented(alloc::string::String::from(\"method {}::Server::{} not implemented\"))) }}",
                                   module_name(name),
                                   capitalize_first_letter(name), params_ty_params,
                                   capitalize_first_letter(name), results_ty_params,
@@ -2644,7 +2644,7 @@ fn generate_node(
 
                     server_interior.push(
                         Line(fmt!(ctx,
-                                  "fn {}(&mut self, _: {}Params<{}>) -> {capnp}::capability::Promise<(), {capnp}::Error> {{ {capnp}::capability::Promise::err({capnp}::Error::unimplemented(\"method {}::Server::{} not implemented\".to_string())) }}",
+                                  "fn {}(&mut self, _: {}Params<{}>) -> {capnp}::capability::Promise<(), {capnp}::Error> {{ {capnp}::capability::Promise::err({capnp}::Error::unimplemented(alloc::string::String::from(\"method {}::Server::{} not implemented\"))) }}",
                                   module_name(name),
                                   capitalize_first_letter(name), params_ty_params,
                                   node_name, module_name(name)
@@ -2722,10 +2722,10 @@ fn generate_node(
             mod_interior.push(
                 Branch(vec![
                     Line(fmt!(ctx,"impl {bracketed_params} {capnp}::capability::FromClientHook for Client{bracketed_params} {{")),
-                    indent(Line(fmt!(ctx,"fn new(hook: Box<dyn ({capnp}::private::capability::ClientHook)>) -> Self {{"))),
+                    indent(Line(fmt!(ctx,"fn new(hook: alloc::boxed::Box<dyn ({capnp}::private::capability::ClientHook)>) -> Self {{"))),
                     indent(indent(Line(fmt!(ctx,"Self {{ client: {capnp}::capability::Client::new(hook), {} }}", params.phantom_data_value)))),
                     indent(line("}")),
-                    indent(Line(fmt!(ctx,"fn into_client_hook(self) -> Box<dyn ({capnp}::private::capability::ClientHook)> {{"))),
+                    indent(Line(fmt!(ctx,"fn into_client_hook(self) -> alloc::boxed::Box<dyn ({capnp}::private::capability::ClientHook)> {{"))),
                     indent(indent(line("self.client.hook"))),
                     indent(line("}")),
                     indent(Line(fmt!(ctx,"fn as_client_hook(&self) -> &dyn ({capnp}::private::capability::ClientHook) {{"))),
@@ -2888,7 +2888,7 @@ fn generate_node(
                     indent(indent(line("match interface_id {"))),
                     indent(indent(indent(line("_private::TYPE_ID => Self::dispatch_call_internal(&mut self.server, method_id, params, results),")))),
                     indent(indent(indent(base_dispatch_arms))),
-                    indent(indent(indent(Line(fmt!(ctx,"_ => {{ {capnp}::capability::DispatchCallResult::new({capnp}::capability::Promise::err({capnp}::Error::unimplemented(\"Method not implemented.\".to_string())), false) }}"))))),
+                    indent(indent(indent(Line(fmt!(ctx,"_ => {{ {capnp}::capability::DispatchCallResult::new({capnp}::capability::Promise::err({capnp}::Error::unimplemented(alloc::string::String::from(\"Method not implemented.\"))), false) }}"))))),
                     indent(indent(line("}"))),
                     indent(line("}")),
                     line("}")]));
@@ -2903,7 +2903,7 @@ fn generate_node(
                     indent(Line(fmt!(ctx,"pub fn dispatch_call_internal(server: &mut _T, method_id: u16, params: {capnp}::capability::Params<{capnp}::any_pointer::Owned>, results: {capnp}::capability::Results<{capnp}::any_pointer::Owned>) -> {capnp}::capability::DispatchCallResult {{"))),
                     indent(indent(line("match method_id {"))),
                     indent(indent(indent(dispatch_arms))),
-                    indent(indent(indent(Line(fmt!(ctx,"_ => {{ {capnp}::capability::DispatchCallResult::new({capnp}::capability::Promise::err({capnp}::Error::unimplemented(\"Method not implemented.\".to_string())), false) }}"))))),
+                    indent(indent(indent(Line(fmt!(ctx,"_ => {{ {capnp}::capability::DispatchCallResult::new({capnp}::capability::Promise::err({capnp}::Error::unimplemented(alloc::string::String::from(\"Method not implemented.\"))), false) }}"))))),
                     indent(indent(line("}"))),
                     indent(line("}")),
                     line("}")]));
